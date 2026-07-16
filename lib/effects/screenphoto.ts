@@ -179,17 +179,18 @@ export async function simulateScreenPhoto(
   { rng, t, s }: ScreenPhotoOptions,
 ): Promise<HTMLCanvasElement> {
   let c = canvas;
-  if (rng.chance(0.7)) c = keystone(c, rng.range(0.01, 0.05) * (0.4 + t), rng);
-  c = gaussianBlur(c, (0.3 + 0.7 * t) * s);
+  if (rng.chance(0.75)) c = keystone(c, rng.range(0.01, 0.07) * (0.4 + t), rng);
+  c = gaussianBlur(c, (0.3 + 1.1 * t) * s);
   c = realMoire(c, {
-    pitch: Math.max(2, Math.round(rng.range(2.5, 4) * s)),
-    ratio: rng.range(1.05, 1.12),
-    angle: rng.range(0.05, 0.3),
-    strength: (0.06 + 0.14 * t),
+    pitch: Math.max(2, Math.round(rng.range(2.3, 4.2) * s)),
+    ratio: rng.range(1.04, 1.15),
+    // Any orientation — you never hold the phone squared up to the screen.
+    angle: rng.range(-1.4, 1.4),
+    strength: 0.06 + 0.24 * t,
   });
-  c = glare(c, 0.3 + 0.7 * t, rng);
-  c = radialAberration(c, rng.range(0.8, 2.2) * s * (0.4 + t));
-  c = sensorNoise(c, (1.2 + 3 * t) * (0.4 + 0.6 * s), rng.int(1, 0x7fffffff));
-  c = await compressJPEG(c, clamp(rng.range(0.78, 0.9) - 0.25 * t, 0.4, 0.9));
+  c = glare(c, 0.3 + 0.8 * t, rng);
+  c = radialAberration(c, rng.range(0.8, 3.0) * s * (0.4 + t));
+  c = sensorNoise(c, (1.2 + 5 * t) * (0.4 + 0.6 * s), rng.int(1, 0x7fffffff));
+  c = await compressJPEG(c, clamp(rng.range(0.72, 0.9) - 0.42 * t, 0.26, 0.9));
   return c;
 }
