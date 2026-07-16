@@ -1,9 +1,8 @@
 import type { ApiResult } from "./types";
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:7010").replace(
-  /\/+$/,
-  "",
-);
+// Backend lives in this same app (app/api/*), so default to same-origin.
+// Override with NEXT_PUBLIC_API_BASE_URL to point at a separate backend.
+const BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(/\/+$/, "");
 
 const TOKEN_KEY = "patina_token";
 

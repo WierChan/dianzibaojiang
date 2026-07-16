@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 导出纯静态站点到 out/,可直接部署到 Nginx
-  output: "export",
-  // 静态导出下 next/image 无法用优化服务;本项目用普通 <img>,这里关掉以防万一
+  // 后端已并入本仓库(app/api/*),需要 Node 运行时,故不再静态导出。
+  serverExternalPackages: ["better-sqlite3"],
   images: { unoptimized: true },
 };
 

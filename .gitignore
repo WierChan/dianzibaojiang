@@ -43,3 +43,6 @@ next-env.d.ts
 
 # assistant / editor tooling
 /.claude/
+
+# local backend data (sqlite db + uploaded images)
+/data/
