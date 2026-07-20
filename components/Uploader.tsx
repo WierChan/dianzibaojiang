@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { loadImageFile } from "@/lib/loadImage";
+import { loadImageFile, loadImageSrc } from "@/lib/loadImage";
 
 interface UploaderProps {
   onImage: (canvas: HTMLCanvasElement, name: string) => void;
@@ -22,6 +22,16 @@ export function Uploader({ onImage, imageName }: UploaderProps) {
       onImage(canvas, file.name);
     } catch {
       setError("无法解码这张图片,换一个格式试试(JPG / PNG / WebP)");
+    }
+  };
+
+  const loadExample = async (e: MouseEvent) => {
+    e.stopPropagation(); // don't also open the file dialog
+    setError(null);
+    try {
+      onImage(await loadImageSrc("/example.jpg"), "示例图.jpg");
+    } catch {
+      setError("示例加载失败");
     }
   };
 
@@ -73,6 +83,13 @@ export function Uploader({ onImage, imageName }: UploaderProps) {
       {input}
       <p className="text-lg font-medium text-neutral-800">上传图片</p>
       <p className="text-sm text-neutral-400">点击选择或拖拽到这里 · JPG / PNG / WebP · 最大 6000px</p>
+      <button
+        type="button"
+        onClick={loadExample}
+        className="mt-1 text-sm text-neutral-500 underline underline-offset-4 hover:text-neutral-800"
+      >
+        没有图?试试示例
+      </button>
       {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
