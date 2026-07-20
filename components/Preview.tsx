@@ -20,22 +20,25 @@ function paint(target: HTMLCanvasElement | null, src: HTMLCanvasElement | null) 
 }
 
 export function Preview({ original, processed, busy, progress }: PreviewProps) {
-  const processedRef = useRef<HTMLCanvasElement>(null);
   const originalRef = useRef<HTMLCanvasElement>(null);
+  const processedRef = useRef<HTMLCanvasElement>(null);
   const [showOriginal, setShowOriginal] = useState(false);
 
   // Draw each layer only when its source changes — never on toggle.
   useEffect(() => {
-    paint(processedRef.current, processed ?? original);
-  }, [processed, original]);
-  useEffect(() => {
     paint(originalRef.current, original);
   }, [original]);
+  useEffect(() => {
+    paint(processedRef.current, processed);
+  }, [processed]);
 
   if (!original) return null;
 
   const canCompare = !!processed;
-  // Holding just flips this flag → the overlay's opacity. No redraw, no reflow.
+  // Holding just flips this flag → the processed overlay's opacity. No redraw,
+  // no reflow: the box is always sized by the *original*, so the processed (which
+  // may be shrunk) is shown scaled up to that size, and holding reveals the
+  // full-size original underneath at the same on-screen size.
   const hold = (on: boolean) => () => canCompare && setShowOriginal(on);
 
   return (
@@ -48,19 +51,19 @@ export function Preview({ original, processed, busy, progress }: PreviewProps) {
         onPointerLeave={hold(false)}
         onPointerCancel={hold(false)}
       >
-        {/* Processed layer sizes the box. */}
-        <canvas
-          ref={processedRef}
-          draggable={false}
-          className="block max-h-[62vh] w-auto max-w-full rounded-lg border border-neutral-200 shadow-sm"
-        />
-        {/* Original overlay, fitted to the same box; shown only while held. */}
+        {/* Original is the base layer — it sizes the box. */}
         <canvas
           ref={originalRef}
           draggable={false}
+          className="block max-h-[62vh] w-auto max-w-full rounded-lg border border-neutral-200 shadow-sm"
+        />
+        {/* Processed overlay, fitted to the same box; hidden while held. */}
+        <canvas
+          ref={processedRef}
+          draggable={false}
           aria-hidden
           className="pointer-events-none absolute inset-0 h-full w-full rounded-lg object-contain transition-opacity duration-100"
-          style={{ opacity: showOriginal ? 1 : 0 }}
+          style={{ opacity: canCompare && !showOriginal ? 1 : 0 }}
         />
         {busy && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-white/60 backdrop-blur-[1px]">
