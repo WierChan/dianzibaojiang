@@ -86,6 +86,30 @@ export function Controls({
           step={1}
           onValueChange={(v: number[]) => onIntensityChange(v[0])}
         />
+        <div className="mt-1 flex items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Label htmlFor="resize">缩小实际像素尺寸</Label>
+            <span className="text-xs text-neutral-400">
+              模拟平台上限,让图真的变小;关闭则只降画质、保留原尺寸
+            </span>
+          </div>
+          <button
+            id="resize"
+            type="button"
+            role="switch"
+            aria-checked={resize}
+            onClick={() => onResizeChange(!resize)}
+            className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
+              resize ? "bg-neutral-800" : "bg-neutral-300"
+            }`}
+          >
+            <span
+              className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                resize ? "translate-x-5" : "translate-x-0.5"
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -106,31 +130,6 @@ export function Controls({
           placeholder="留空则每次生成都不一样"
           onChange={(e) => onSeedChange(e.target.value)}
         />
-      </div>
-
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex flex-col">
-          <Label htmlFor="resize">缩小实际像素尺寸</Label>
-          <span className="text-xs text-neutral-400">
-            模拟平台上限,让图真的变小;关闭则只降画质、保留原尺寸
-          </span>
-        </div>
-        <button
-          id="resize"
-          type="button"
-          role="switch"
-          aria-checked={resize}
-          onClick={() => onResizeChange(!resize)}
-          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${
-            resize ? "bg-neutral-800" : "bg-neutral-300"
-          }`}
-        >
-          <span
-            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
-              resize ? "translate-x-5" : "translate-x-0.5"
-            }`}
-          />
-        </button>
       </div>
 
       <Button size="lg" className="w-full" onClick={onGenerate} disabled={disabled || busy}>
