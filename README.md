@@ -3,7 +3,7 @@
 把任何图片变成「在互联网上流传了十五年」的样子。不是 AI 生成,不是复古滤镜——
 是用确定性图像处理算法模拟一张图的流传史:上传、压缩、截图、再上传、屏摄、再压缩。
 
-图片的做旧处理全部在你的浏览器本地完成。只有当你登录后主动「保存到历史」或「发布到作品广场」时,成品图才会上传到服务器(存在本地 `data/uploads`);不保存就不上传。
+纯浏览器端处理,图片不会离开你的设备。
 
 ## 运行
 
@@ -11,10 +11,6 @@
 npm install
 npm run dev
 ```
-
-**前后端一体,一条命令跑整套** —— 登录、历史、作品广场的后端就是本项目的 Next.js API 路由(`app/api/*`),数据落在 SQLite(`data/patina.db`)、图片落在 `data/uploads`,首次运行自动建库建表、灌入预设。无需另起服务。
-
-可选环境变量见 [`.env.example`](.env.example):`AUTH_SECRET`(上线务必设)、`NEXT_PUBLIC_API_BASE_URL`(默认同源,想改用外部后端时才需要)。上线请走 **HTTPS**,否则登录会明文传输用户名密码。
 
 ## 预设
 
@@ -36,4 +32,4 @@ npm run dev
 - `lib/effects/random.ts` / `seed.ts` — 种子化随机:留空每次微妙不同,填种子则完全可复现
 - 强度滑杆 0–100 平滑插值所有参数;预览在 ≤1600px 下运行以保证速度,下载时以原分辨率(≤6000px)重跑同一种子
 
-技术栈:前后端一体的 **Next.js** 应用。前端 TypeScript + TailwindCSS + shadcn/ui + Canvas(做旧引擎纯客户端,`lib/effects/`);后端为 `app/api/*` 路由 + **SQLite**(better-sqlite3,`lib/server/`),JWT 鉴权(`crypto` 手签)、密码 scrypt,成品图存本地 `data/uploads`。前端通过 `lib/api/` 同源访问。
+技术栈:Next.js + TypeScript + TailwindCSS + shadcn/ui + Canvas,无后端。

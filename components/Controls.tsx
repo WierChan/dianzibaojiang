@@ -11,17 +11,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { type PresetId } from "@/lib/effects/pipelines";
-
-/** 预设下拉项(来自后端 /api/presets)。 */
-export interface PresetOption {
-  id: string;
-  name: string;
-  description?: string | null;
-}
+import { PRESETS, type PresetId } from "@/lib/effects/pipelines";
 
 interface ControlsProps {
-  presets: PresetOption[];
   preset: PresetId;
   onPresetChange: (p: PresetId) => void;
   intensity: number;
@@ -46,7 +38,6 @@ function intensityLabel(v: number): string {
 }
 
 export function Controls({
-  presets,
   preset,
   onPresetChange,
   intensity,
@@ -61,7 +52,7 @@ export function Controls({
   busy,
   disabled,
 }: ControlsProps) {
-  const info = presets.find((p) => p.id === preset);
+  const info = PRESETS.find((p) => p.id === preset);
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -71,14 +62,14 @@ export function Controls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {presets.map((p) => (
+            {PRESETS.map((p) => (
               <SelectItem key={p.id} value={p.id}>
                 {p.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        {info?.description && <p className="text-xs text-neutral-400">{info.description}</p>}
+        {info && <p className="text-xs text-neutral-400">{info.description}</p>}
       </div>
 
       <div className="flex flex-col gap-3">

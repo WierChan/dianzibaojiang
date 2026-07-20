@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 后端已并入本仓库(app/api/*),需要 Node 运行时,故不再静态导出。
-  serverExternalPackages: ["better-sqlite3"],
+  // 纯客户端工具:导出静态站点到 out/,可直接用 Nginx 发文件,无需 Node 进程。
+  output: "export",
   images: { unoptimized: true },
 };
 
