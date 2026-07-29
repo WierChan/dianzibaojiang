@@ -172,7 +172,20 @@ export default function Home() {
         </>
       )}
 
-      <footer className="mt-auto pt-8 text-xs text-neutral-400">由 CHX 设计</footer>
+      <footer className="mt-auto flex flex-col items-center gap-1 pt-8 text-xs text-neutral-400">
+        <p>由 CHX 设计</p>
+        <p>
+          喜欢这类小玩意?更多创意工具在{" "}
+          <a
+            href="https://chenhengxi.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-neutral-700"
+          >
+            chenhengxi.com
+          </a>
+        </p>
+      </footer>
     </main>
   );
 }
