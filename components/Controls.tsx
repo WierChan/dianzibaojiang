@@ -11,9 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { PRESETS, type PresetId } from "@/lib/effects/pipelines";
+import type { PresetInfo } from "@/lib/api";
+import type { PresetId } from "@/lib/effects/pipelines";
 
 interface ControlsProps {
+  /** 预设列表,来自后端 /api/presets(已过滤为本地有算法实现的)。 */
+  presets: PresetInfo[];
   preset: PresetId;
   onPresetChange: (p: PresetId) => void;
   intensity: number;
@@ -38,6 +41,7 @@ function intensityLabel(v: number): string {
 }
 
 export function Controls({
+  presets,
   preset,
   onPresetChange,
   intensity,
@@ -52,7 +56,7 @@ export function Controls({
   busy,
   disabled,
 }: ControlsProps) {
-  const info = PRESETS.find((p) => p.id === preset);
+  const info = presets.find((p) => p.presetKey === preset);
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -62,8 +66,8 @@ export function Controls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {PRESETS.map((p) => (
-              <SelectItem key={p.id} value={p.id}>
+            {presets.map((p) => (
+              <SelectItem key={p.presetKey} value={p.presetKey}>
                 {p.name}
               </SelectItem>
             ))}

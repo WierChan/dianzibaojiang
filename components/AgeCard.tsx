@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import type { AgeStats } from "@/lib/age";
+import type { AgeStats } from "@/lib/api";
 
 export function AgeCard({ stats }: { stats: AgeStats }) {
   return (
