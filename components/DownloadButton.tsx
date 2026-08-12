@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { estimateAge } from "@/lib/age";
 import { canvasToBlob } from "@/lib/effects/core";
 import { runPipeline, type PresetId } from "@/lib/effects/pipelines";
 import { createRng } from "@/lib/effects/random";
@@ -30,8 +31,6 @@ interface DownloadButtonProps {
   seed: string | null;
   watermark: string;
   resize: boolean;
-  /** 后端返回的互联网年龄(年),用于伪造 EXIF 拍摄日期;后端不可用时为 null,跳过 EXIF。 */
-  ageYears: number | null;
   disabled: boolean;
 }
 
@@ -42,7 +41,6 @@ export function DownloadButton({
   seed,
   watermark,
   resize,
-  ageYears,
   disabled,
 }: DownloadButtonProps) {
   const [format, setFormat] = useState<Format>("jpeg");
@@ -56,8 +54,8 @@ export function DownloadButton({
       let blob = await canvasToBlob(canvas, MIME[format], format === "png" ? undefined : 0.92);
       // Stamp fake camera EXIF: capture date set back by the same "years online"
       // the AgeCard shows, with a period-correct camera. JPEG carries EXIF natively.
-      if (format === "jpeg" && ageYears != null) {
-        const years = ageYears;
+      if (format === "jpeg") {
+        const years = estimateAge(preset, intensity, createRng(`${seed}::age`)).years;
         const rng = createRng(`${seed}::exif`);
         const d = new Date();
         d.setFullYear(d.getFullYear() - Math.round(years));

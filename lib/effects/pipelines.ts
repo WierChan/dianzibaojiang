@@ -23,6 +23,22 @@ export type PresetId =
   | "screenphoto"
   | "survivor";
 
+export interface PresetInfo {
+  id: PresetId;
+  name: string;
+  description: string;
+}
+
+export const PRESETS: PresetInfo[] = [
+  { id: "classic", name: "互联网经典", description: "泛用型网络老化:反复压缩、缩放、加噪" },
+  { id: "qq2008", name: "QQ 2008", description: "蓝调、狠压缩、过度锐化、CRT 柔光" },
+  { id: "tieba", name: "百度贴吧", description: "经典变绿、色度崩坏、锐化光边、反复压缩" },
+  { id: "wechat", name: "微信转发", description: "640px、压缩、轻糊、截图痕迹、褪色" },
+  { id: "screenshotception", name: "截图套截图", description: "被反复截图,状态栏残影与漂移" },
+  { id: "screenphoto", name: "手机屏摄", description: "拿手机拍屏幕:透视、失焦、真摩尔纹、眩光、传感器噪点" },
+  { id: "survivor", name: "互联网活化石", description: "所有算法轮番上阵,十五年包浆" },
+];
+
 export interface PipelineOptions {
   preset: PresetId;
   /** 0–100 */
@@ -436,9 +452,3 @@ const BUILDERS: Record<PresetId, Builder> = {
   screenphoto,
   survivor,
 };
-
-/**
- * 本地实现了算法的预设键。预设的名称/描述等展示数据来自后端
- * /api/presets,前端用这份列表过滤掉本地没有对应算法的条目。
- */
-export const PRESET_IDS = Object.keys(BUILDERS) as PresetId[];
