@@ -173,7 +173,12 @@ export default function Home() {
       )}
 
       <footer className="mt-auto flex flex-col items-center gap-1 pt-8 text-xs text-neutral-400">
-        <p>由 CHX 设计</p>
+        <p>
+          由 CHX 设计 ·{" "}
+          <a href="/privacy" className="underline underline-offset-2 hover:text-neutral-700">
+            隐私政策
+          </a>
+        </p>
         <p>
           喜欢这类小玩意?更多创意工具在{" "}
           <a
